@@ -4,21 +4,23 @@ export async function authUser() {
     let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
+    // checks if the url contains code
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
-
-    console.log(code)
     
     if (code) {
-        console.log("Authorization code found:", code);
         // exchange code for access token
         const accessToken = await getAccessToken(clientId, code);
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("expiresAt", Date.now() + 3600 * 1000); // Assuming token expires in 1 hour
-        // Redirect to remove code from URL
-        window.history.replaceState({}, document.title, "");
-        return accessToken;
+        if (accessToken) {
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("expiresAt", Date.now() + 3600 * 1000); // Assuming token expires in 1 hour
+            // Redirect to remove code from URL
+            window.history.replaceState({}, document.title, "");
+            return accessToken;
+        }
+        
     } else {
+        console.log("No code")
         // If no code, try to load the profile if already authenticated
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
@@ -28,11 +30,14 @@ export async function authUser() {
                 const newToken = await refreshAccessToken();
                 localStorage.setItem("accessToken", newToken);
                 localStorage.setItem("expiresAt", Date.now() + 3600 * 1000);
+                console.log("DONE")
                 return newToken;
             } else {
+                console.log("DONE")
                 return accessToken;
             }
         } else {
+            console.log("No code or access code")
             // no code or token (redirect to authentication)
             redirectToAuthCodeFlow(clientId)
         }
@@ -50,7 +55,7 @@ export async function authUser() {
         params.append("client_id", clientId);
         params.append("response_type", "code");
         params.append("redirect_uri", redirectUri);
-        params.append("scope", "user-read-private user-read-email");
+        params.append("scope", "user-read-private user-read-email user-top-read");
         params.append("code_challenge_method", "S256");
         params.append("code_challenge", challenge);
 
@@ -78,7 +83,6 @@ export async function authUser() {
 
     async function getAccessToken(clientId, code) {
         console.log("getting access token")
-        // TODO: Get access token for code
         const verifier = localStorage.getItem("verifier");
 
         const params = new URLSearchParams();
@@ -94,8 +98,18 @@ export async function authUser() {
             body: params
         });
 
+        if (!result.ok) { // Check if the request was successful
+            console.error("Failed to get access token:", result.statusText);
+            return null;
+        }
+
         const data = await result.json();
         const { access_token, expires_in, refresh_token } = data;
+
+        if (!access_token) { // Check if access token is present
+            console.error("Access token is undefined");
+            return null;
+        }
 
         // Store access token, expiry time, and refresh token
         localStorage.setItem("accessToken", access_token);
