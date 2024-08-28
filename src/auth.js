@@ -1,13 +1,15 @@
 export async function authUser() {
         
-    let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
-    // let redirectUri = 'http://127.0.0.1:5500/index.html'
+    // let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
+    let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
 
-    if (code) {
+    console.log(code)
+    
+    if (code != null) {
         console.log("Authorization code found:", code);
         const accessToken = await getAccessToken(clientId, code);
         localStorage.setItem("accessToken", accessToken);
@@ -32,6 +34,8 @@ export async function authUser() {
                 const profile = await fetchProfile(accessToken);
                 return profile;
             }
+        } else {
+            redirectToAuthCodeFlow(clientId)
         }
     }
 
