@@ -1,7 +1,7 @@
 export async function authUser() {
     console.log("starting to auth user")
-    let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
-    // let redirectUri = 'http://127.0.0.1:5500/index.html'
+    // let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
+    let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
     const params = new URLSearchParams(window.location.search);
@@ -17,8 +17,7 @@ export async function authUser() {
         localStorage.setItem("expiresAt", Date.now() + 3600 * 1000); // Assuming token expires in 1 hour
         // Redirect to remove code from URL
         window.history.replaceState({}, document.title, "");
-        const profile = await fetchProfile(accessToken);
-        return profile;
+        return accessToken;
     } else {
         // If no code, try to load the profile if already authenticated
         const accessToken = localStorage.getItem("accessToken");
@@ -29,11 +28,9 @@ export async function authUser() {
                 const newToken = await refreshAccessToken();
                 localStorage.setItem("accessToken", newToken);
                 localStorage.setItem("expiresAt", Date.now() + 3600 * 1000);
-                const profile = await fetchProfile(newToken);
-                return profile;
+                return newToken;
             } else {
-                const profile = await fetchProfile(accessToken);
-                return profile;
+                return accessToken;
             }
         } else {
             // no code or token (redirect to authentication)
@@ -132,17 +129,4 @@ export async function authUser() {
 
         return access_token;
     }
-
-
-    async function fetchProfile(token) {
-        console.log("fetching profile")
-        const result = await fetch("https://api.spotify.com/v1/me", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
-        return await result.json();
-    }
-
-    
 }
