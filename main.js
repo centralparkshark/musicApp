@@ -8,7 +8,7 @@ function toggleMode() {
     bodyEl.classList.toggle("dark");
 }
 
-let redirectUri = 'http://127.0.0.1:5500/index.html'
+let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
 let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 let clientSecret = "9b951f35b1b34800aa3f1d942405e2c6"
 
