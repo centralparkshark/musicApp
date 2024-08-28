@@ -10,9 +10,6 @@ function toggleMode() {
     bodyEl.classList.toggle("dark");
 }
 
-const profile = await authUser();
-populateUI(profile)
-
 function populateUI(profile) {
     // TODO: Update UI with profile data
     console.log(profile)
@@ -34,3 +31,10 @@ function populateUI(profile) {
 
 // Event Listeners
 toggleModeBtn.addEventListener('click', toggleMode);
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const profile = await authUser();
+    if (profile) {
+        populateUI(profile);
+    }
+});

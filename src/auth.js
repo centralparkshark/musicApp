@@ -1,7 +1,7 @@
 export async function authUser() {
-        
+    console.log("starting to auth user")
     let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
-    //let redirectUri = 'http://127.0.0.1:5500/index.html'
+    // let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
     const params = new URLSearchParams(window.location.search);
@@ -9,13 +9,14 @@ export async function authUser() {
 
     console.log(code)
     
-    if (code != null) {
+    if (code) {
         console.log("Authorization code found:", code);
+        // exchange code for access token
         const accessToken = await getAccessToken(clientId, code);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("expiresAt", Date.now() + 3600 * 1000); // Assuming token expires in 1 hour
         // Redirect to remove code from URL
-        window.history.replaceState({}, document.title, "/index.html");
+        window.history.replaceState({}, document.title, "");
         const profile = await fetchProfile(accessToken);
         return profile;
     } else {
@@ -35,11 +36,13 @@ export async function authUser() {
                 return profile;
             }
         } else {
+            // no code or token (redirect to authentication)
             redirectToAuthCodeFlow(clientId)
         }
     }
 
     async function redirectToAuthCodeFlow(clientId) {
+        console.log("redirect to auth code flow")
         // TODO: Redirect to Spotify authorization page
         const verifier = generateCodeVerifier(128);
         const challenge = await generateCodeChallenge(verifier);
@@ -77,6 +80,7 @@ export async function authUser() {
     }
 
     async function getAccessToken(clientId, code) {
+        console.log("getting access token")
         // TODO: Get access token for code
         const verifier = localStorage.getItem("verifier");
 
@@ -105,6 +109,7 @@ export async function authUser() {
     }
 
     async function refreshAccessToken() {
+        console.log("getting refresh token")
         const refreshToken = localStorage.getItem("refreshToken");
 
         const params = new URLSearchParams();
@@ -130,13 +135,13 @@ export async function authUser() {
 
 
     async function fetchProfile(token) {
+        console.log("fetching profile")
         const result = await fetch("https://api.spotify.com/v1/me", {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });
 
-        const profile = await result.json();
-        return profile;
+        return await result.json();
     }
 
     
