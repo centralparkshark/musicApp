@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy">
+    <title>Music</title>
+    <link rel="shortcut icon" href="./imgs/sabrinaCarpenter.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./src/style.css">
+    <script defer src="./main.js" type="module"></script>
+</head>
+<body class="dark">
+    <button id="authUser">Login</button>
+    <div class="section" id="player">
+        <h1>Display your Spotify profile data</h1>
+
+        <section id="profile">
+        <h2>Logged in as <span id="displayName"></span></h2>
+        <span id="avatar"></span>
+        <ul>
+            <li>User ID: <span id="id"></span></li>
+            <li>Email: <span id="email"></span></li>
+            <li>Spotify URI: <a id="uri" href="#"></a></li>
+            <li>Link: <a id="url" href="#"></a></li>
+            <li>Profile Image: <span id="imgUrl"></span></li>
+        </ul>
+        </section>
+    </div>
+    <div class="section" id="songRecs"> 
+        <h2 class="title">Song Recommendations:</h2>
+        <div class="cardHolder">
+            <div class="card">
+                <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" class="artistPic">
+                <div class="songName">Espresso</div>
+                <div class="artistName">Sabrina Carpenter</div>
+            </div>
+            <div class="card">
+                <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" class="artistPic">
+                <div class="songName">Espresso</div>
+                <div class="artistName">Sabrina Carpenter</div>
+            </div>
+            <div class="card">
+                <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" class="artistPic">
+                <div class="songName">Espresso</div>
+                <div class="artistName">Sabrina Carpenter</div>
+            </div>
+            <div class="card">
+                <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" class="artistPic">
+                <div class="songName">Espresso</div>
+                <div class="artistName">Sabrina Carpenter</div>
+            </div>
+            <div class="card">
+                <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" class="artistPic">
+                <div class="songName">Espresso</div>
+                <div class="artistName">Sabrina Carpenter</div>
+            </div>
+        </div>
+    </div>
+    <button id="toggleMode">Light/Dark Mode</button>
+</body>
+
+</html>

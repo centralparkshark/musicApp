@@ -1,0 +1,120 @@
+/* <div class="card">
+        <img src="./imgs/sabrinaCarpenter.jpg" alt="Sabrina Carpenter" id="artistPic">
+        <div class="artistName">Sabrina Carpenter</div>
+        <div class="songName"></div>
+    </div> */
+
+:root {
+    --darkBlue: #1c2133;
+    --white: #e3e2dd;
+    --mint: #a8ebd8;
+    /* dark mode: */
+    --blueD: #0c5067;
+    --purpleD: #9c82ac;
+    --greenD: #0d5a5c;
+    /* light mode: */
+    --blue: #00748c;
+    --purple: #a37fbb;
+    --green: #44bcbf;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+body.dark {
+    background-color: var(--darkBlue);
+    color: var(--white);
+    .card {
+        background-color: var(--blueD);
+        background-image: linear-gradient(var(--green), var(--blueD));
+    }
+    button {
+        background-color: var(--greenD);
+        color: white;
+    }
+}
+
+body.light {
+    background-color: var(--white);
+    color: var(--darkBlue);
+    .card {
+        background-color: var(--green);
+        background-image: linear-gradient(var(--purpleD), var(--green));
+    }
+    button {
+        background-color: var(--green);
+        color: var(--darkBlue);
+    }
+}
+
+button {
+    cursor: pointer;
+    width: 150px;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 2px; 
+    font-weight: 600;
+}
+
+#toggleMode {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardHolder {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.card {
+    transform: translateX(-20px);
+    margin: 40px;
+    height: 250px;
+    width: 250px;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 16px;
+    box-shadow: 0 4px 6px 0 rgba(28, 33, 51, 0.3), 0 1px 3px 0 rgba(28, 33, 51, 0.1);
+}
+
+.artistPic {
+    position: absolute;
+    right: -50px;
+    top: 20px;
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+    border: 2px solid var(--mint);
+    box-shadow: 2px 1px 6px 1px rgba(28, 33, 51, 0.3), 0 1px 3px 0 rgba(28, 33, 51, 0.1);
+}
+
+.songName {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.artistName {
+    padding-top: .5rem;
+    font-weight: 100;
+}
