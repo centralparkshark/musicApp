@@ -4,13 +4,32 @@ export async function authUser() {
     let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
+    // Check if access token exists and is valid
+    let accessToken = localStorage.getItem("accessToken");
+    const expiresAt = localStorage.getItem("expiresAt");
+
+    if (accessToken && Date.now() < expiresAt) {
+        console.log("Using existing access token");
+        return accessToken;
+    }
+
+    // If token exists but expired, refresh it
+    if (accessToken && Date.now() >= expiresAt) {
+        console.log("Access token expired, refreshing...");
+        accessToken = await refreshAccessToken();
+        if (accessToken) {
+            console.log("Token refreshed");
+            return accessToken;
+        }
+    }
+
     // checks if the url contains code
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     
     if (code) {
         // exchange code for access token
-        const accessToken = await getAccessToken(clientId, code);
+        accessToken = await getAccessToken(clientId, code);
         if (accessToken) {
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("expiresAt", Date.now() + 3600 * 1000); // Assuming token expires in 1 hour
@@ -20,27 +39,8 @@ export async function authUser() {
         }
         
     } else {
-        console.log("No code")
-        // If no code, try to load the profile if already authenticated
-        const accessToken = localStorage.getItem("accessToken");
-        if (accessToken) {
-            const expiresAt = localStorage.getItem("expiresAt");
-            if (Date.now() > expiresAt) {
-                console.log("Access token expired, refreshing...");
-                const newToken = await refreshAccessToken();
-                localStorage.setItem("accessToken", newToken);
-                localStorage.setItem("expiresAt", Date.now() + 3600 * 1000);
-                console.log("DONE")
-                return newToken;
-            } else {
-                console.log("DONE")
-                return accessToken;
-            }
-        } else {
-            console.log("No code or access code")
-            // no code or token (redirect to authentication)
-            redirectToAuthCodeFlow(clientId)
-        }
+        console.log("No code or valid access token found, redirecting to auth code flow...");
+        await redirectToAuthCodeFlow(clientId, redirectUri);
     }
 
     async function redirectToAuthCodeFlow(clientId) {

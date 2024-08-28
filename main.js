@@ -2,7 +2,7 @@ import {authUser} from "./src/auth.js";
 import { displaySongInfo } from "./src/songInfo.js";
 
 const toggleModeBtn = document.getElementById("toggleMode");
-const loginBtn = document.getElementById("authUser");
+const closePopUpBtn = document.getElementById("closePopUp");
 const bodyEl = document.querySelector("body");
 const cardHolderEl = document.getElementById("topTracks");
 const topTracksTitle = document.getElementById("songRecsTitle");
@@ -15,9 +15,10 @@ function toggleMode() {
 }
 
 function populateUI(obj) {
-    topTracksTitle.innerText = "Your Top Songs:"
-    console.log(obj)
-    obj.items.forEach(track => {
+    try {
+        topTracksTitle.innerText = "Your Top Songs:"
+        console.log(obj)
+        obj.items.forEach(track => {
         let artists = track.artists;
         let artistText = ''
         let length = artists.length - 1;
@@ -35,6 +36,12 @@ function populateUI(obj) {
         newCard.addEventListener('click', displaySongInfo)
         cardHolderEl.appendChild(newCard)
     });
+    } catch (error) {
+        token = authUser();
+        let topTracks = fetchTracks(token)
+        populateUI(topTracks) 
+
+    }
 }
 
 async function fetchTracks(token) {
@@ -47,27 +54,46 @@ async function fetchTracks(token) {
 
 }
 
-
+function closePopUp() {
+    document.getElementById("popUp").style.display = "none"
+}
 
 // Event Listeners
 toggleModeBtn.addEventListener('click', toggleMode);
+closePopUpBtn.addEventListener('click', closePopUp)
 
 let token = localStorage.getItem("accessToken");
 
 if (token) {
     let topTracks = await fetchTracks(token)
     populateUI(topTracks) 
+} else {
+    token = await authUser();
+    let topTracks = await fetchTracks(token)
+    populateUI(topTracks) 
 }
 
-async function loginUser() {
-    token = await authUser();
-};
 
 
+// TO-DO: 
+// - fix login 
+// - click -> pop up
+    // - view basic information
+    // - get recs
+// - player? 
+    // add to queue, play now
 
-// if (token) {
-//     const topTracks = await fetchTracks(token)
-//     populateUI(profile)
-// }
 
-loginBtn.addEventListener('click', loginUser)
+// requirements
+// [x] use fetch API to populate app
+// [ ] create user interaction with API (GET)
+// [ ] user mnanipulation of DATA (POST, PUT, or PATCH)
+// [ ] promises
+// [x] async/await 
+// [ ] 3 modules w/ import
+// [ ] runs as expected
+// [x] engaging experience
+// [ ] runs without errors
+// [ ] commit frequently 
+// [ ] readme
+// [x] level of effort

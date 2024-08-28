@@ -1,3 +1,5 @@
+const popUp = document.getElementById("popUp")
+
 export async function displaySongInfo(e) {
     let token = localStorage.getItem("accessToken");
     let linkExt = e.target.id
@@ -8,5 +10,11 @@ export async function displaySongInfo(e) {
         headers: { Authorization: `Bearer ${token}` }
     });
 
-    console.log(await result.json());
+    makePopUp(await result.json())   
+}
+
+function makePopUp(info) {
+    console.log(info)
+
+    popUp.style.display = "flex"
 }
