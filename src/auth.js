@@ -44,7 +44,7 @@ export async function authUser() {
     }
 
     async function redirectToAuthCodeFlow(clientId) {
-        console.log("redirect to auth code flow")
+        console.log("redirected to auth code flow")
         // TODO: Redirect to Spotify authorization page
         const verifier = generateCodeVerifier(128);
         const challenge = await generateCodeChallenge(verifier);

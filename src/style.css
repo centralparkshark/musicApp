@@ -156,7 +156,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* display: none; */
+    display: none;
 }
 
 .popUpCard {
@@ -201,6 +201,7 @@ p {
         }
     }
     .right {
+        padding-top: 30px;
         width: 30%;
         display: flex;
         flex-direction: column;
@@ -244,6 +245,7 @@ p {
 table {
     width: 100%;
     border-collapse: collapse;
+    cursor: default;
 }
 
 thead {
@@ -254,13 +256,14 @@ td {
     padding: 10px 6px;
 }
 
-tbody {
+/* tbody {
 
 }
 
 tr {
-}
+} */
 
 tbody>tr:hover {
     background-color: #0d595c11;
+    cursor: pointer;
 }

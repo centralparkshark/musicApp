@@ -16,5 +16,5 @@ export async function displaySongInfo(e) {
 function makePopUp(info) {
     console.log(info)
 
-    popUp.style.display = "flex"
+    if (popUp) popUp.style.display = "flex"
 }

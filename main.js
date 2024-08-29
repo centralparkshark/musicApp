@@ -5,41 +5,48 @@ const toggleModeBtn = document.getElementById("toggleMode");
 const closePopUpBtn = document.getElementById("closePopUp");
 const bodyEl = document.querySelector("body");
 const cardHolderEl = document.getElementById("topTracks");
-const topTracksTitle = document.getElementById("songRecsTitle");
+const popUp = document.getElementById("popUp");
 
 
 // Toggle dark/light mode
 function toggleMode() {
-    bodyEl.classList.toggle("light");
-    bodyEl.classList.toggle("dark");
+    if (bodyEl) {
+        bodyEl.classList.toggle("light");
+        bodyEl.classList.toggle("dark");
+    }
 }
 
-function populateUI(obj) {
+async function populateUI(obj) {
     try {
-        topTracksTitle.innerText = "Your Top Songs:"
         console.log(obj)
         obj.items.forEach(track => {
-        let artists = track.artists;
-        let artistText = ''
-        let length = artists.length - 1;
-        for (let i = 0; i < length; i++) {
-            artistText += `<a id="artists/${artists[i].id}">${artists[i].name}, </a>`
-        } 
-        artistText += `<a id="artists/${artists[length].id}">${artists[length].name}</a>`
+            let artists = track.artists;
+            let artistText = ''
+            let length = artists.length - 1;
+            for (let i = 0; i < length; i++) {
+                artistText += `<a id="artists/${artists[i].id}">${artists[i].name}, </a>`
+            } 
+            artistText += `<a id="artists/${artists[length].id}">${artists[length].name}</a>`
 
-        const newCard = document.createElement("div")
-        newCard.classList.add("card")
-        newCard.id= `tracks/${track.id}`;
-        newCard.innerHTML = `<img src="${track.album.images[1].url}" alt="${track.album.name}" class="artistPic" id="albums/${track.album.id}">
-                <div class="songName" id="tracks/${track.id}">${track.name}</div>
-                <div class="artistName">${artistText}</div>`
-        newCard.addEventListener('click', displaySongInfo)
-        cardHolderEl.appendChild(newCard)
-    });
+            const newCard = document.createElement("div")
+            newCard.classList.add("card")
+            newCard.id= `tracks/${track.id}`;
+            newCard.innerHTML = `<img src="${track.album.images[1].url}" alt="${track.album.name}" class="artistPic" id="albums/${track.album.id}">
+                    <div class="songName" id="tracks/${track.id}">${track.name}</div>
+                    <div class="artistName">${artistText}</div>`
+            newCard.addEventListener('click', displaySongInfo)
+            if (cardHolderEl) cardHolderEl.appendChild(newCard);
+        });
     } catch (error) {
-        token = authUser();
-        let topTracks = fetchTracks(token)
-        populateUI(topTracks) 
+        console.error("Error populating UI:", error);
+        const token = await authUser();
+        if (token) {
+            const topTracks = await fetchTracks(token)
+            populateUI(topTracks) 
+        } else {
+            console.error("Failed to authenticate user")
+        }
+        
 
     }
 }
@@ -55,12 +62,12 @@ async function fetchTracks(token) {
 }
 
 function closePopUp() {
-    document.getElementById("popUp").style.display = "none"
+    if (popUp) popUp.style.display = "none"
 }
 
 // Event Listeners
-toggleModeBtn.addEventListener('click', toggleMode);
-closePopUpBtn.addEventListener('click', closePopUp)
+if (toggleModeBtn) toggleModeBtn.addEventListener('click', toggleMode);
+if (closePopUpBtn) closePopUpBtn.addEventListener('click', closePopUp)
 
 let token = localStorage.getItem("accessToken");
 
@@ -82,6 +89,7 @@ if (token) {
     // - get recs
 // - player? 
     // add to queue, play now
+// - fix favicon
 
 
 // requirements
