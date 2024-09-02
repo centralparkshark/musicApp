@@ -1,3 +1,4 @@
+// most of this comes directly from spotify oauth how-to page
 export async function authUser() {
     console.log("starting to auth user")
     // let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
@@ -6,8 +7,10 @@ export async function authUser() {
 
     // Check if access token exists and is valid
     let accessToken = localStorage.getItem("accessToken");
+    console.log("Access Token:", accessToken); 
     const expiresAt = localStorage.getItem("expiresAt");
 
+    // checks if not expired
     if (accessToken && Date.now() < expiresAt) {
         console.log("Using existing access token");
         return accessToken;
@@ -55,7 +58,7 @@ export async function authUser() {
         params.append("client_id", clientId);
         params.append("response_type", "code");
         params.append("redirect_uri", redirectUri);
-        params.append("scope", "user-read-private user-read-email user-top-read streaming");
+        params.append("scope", "user-read-private user-read-email user-top-read streaming user-read-playback-state user-modify-playback-state");
         params.append("code_challenge_method", "S256");
         params.append("code_challenge", challenge);
 
@@ -98,12 +101,15 @@ export async function authUser() {
             body: params
         });
 
+       
+
+        const data = await result.json();
+        console.log("Token response:", data)
         if (!result.ok) { // Check if the request was successful
             console.error("Failed to get access token:", result.statusText);
             return null;
         }
 
-        const data = await result.json();
         const { access_token, expires_in, refresh_token } = data;
 
         if (!access_token) { // Check if access token is present
@@ -115,6 +121,8 @@ export async function authUser() {
         localStorage.setItem("accessToken", access_token);
         localStorage.setItem("expiresAt", Date.now() + expires_in * 1000);
         localStorage.setItem("refreshToken", refresh_token);
+        // Redirect to remove code from URL
+        // window.history.replaceState({}, document.title, "");
 
         return access_token;
     }

@@ -19,7 +19,6 @@ function toggleMode() {
 
 async function populateUI(obj) {
     try {
-        console.log(obj)
         obj.items.forEach(track => {
             let artists = track.artists;
             let artistText = ''
@@ -102,9 +101,9 @@ if (token) {
 
 // requirements
 // [x] use fetch API to populate app
-// [ ] create user interaction with API (GET)
+// [x] create user interaction with API (GET)
 // [ ] user manipulation of DATA (POST, PUT, or PATCH)
-// [ ] promises
+// [x] promises
 // [x] async/await 
 // [x] 3 modules w/ import
 // [ ] runs as expected

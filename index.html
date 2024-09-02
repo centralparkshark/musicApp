@@ -8,15 +8,13 @@
     <link rel="shortcut icon" href="./imgs/sabrinaCarpenter.jpg" type="image/x-icon">
     <link rel="stylesheet" href="./src/style.css">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script defer src="./main.js" type="module"></script>
 
 </head>
 <body class="dark">
-    <div class="section">
-        <button id="togglePlay">toggle play</button>
-    </div>
-
     <div class="section" id="songRecs"> 
         <h2 class="title" id="songRecsTitle">Your top songs:</h2>
         <p>Click on a song to view more information.</p>
@@ -27,12 +25,15 @@
 
     <div class="popUp" id="popUp">
         <div class="popUpCard">
-            <div id="closePopUp"><img src="./imgs/close.svg" alt="close button"></div>
+            <div id="closePopUp"><i class="fa fa-close fa-2x"></i></div>
             <div class="popUpInfo">
                 <div class="left" id="trackInfo"></div>
                 <div class="right" id="artistInfo"></div>
             </div>
         </div>
+    </div>
+    <div class="webPlayer">
+        <div id="togglePlay"><i class="fa fa-play fa-2x"></i></div>
     </div>
 </body>
 
