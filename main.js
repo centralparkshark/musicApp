@@ -92,23 +92,23 @@ if (token) {
 // TO-DO: 
 // - fix login 
 // - click -> pop up
-    // - view basic information
     // - get recs
 // - player? 
     // add to queue, play now
 // - fix favicon
-
+// - make input range work
+// - mobile css 
 
 // requirements
 // [x] use fetch API to populate app
 // [x] create user interaction with API (GET)
 // [ ] user manipulation of DATA (POST, PUT, or PATCH)
-// [x] promises
+// [ ] promises
 // [x] async/await 
 // [x] 3 modules w/ import
 // [ ] runs as expected
 // [x] engaging experience
 // [ ] runs without errors
-// [ ] commit frequently 
+// [x] commit frequently 
 // [ ] readme
 // [x] level of effort

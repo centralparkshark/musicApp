@@ -1,6 +1,9 @@
+let play = false;
+let checkSongInfo;
+
 export function makeMusicPlayer(token) {
     const togglePlayBtn = document.getElementById('togglePlay')
-    let play = false;
+    
 
     const player = new Spotify.Player({
         name: 'Web Playback SDK Quick Start Player',
@@ -40,14 +43,18 @@ export function makeMusicPlayer(token) {
         console.error(message);
     });
 
+    checkSongInfo = setInterval(setSongInfo, 5000, token)
+
     togglePlayBtn.onclick = function() {
       player.togglePlay();
       if (play == false) {
         togglePlayBtn.innerHTML = "<i class='fa fa-pause fa-2x'></i>"
         play = true;
+        checkSongInfo = setInterval(setSongInfo, 5000, token)
       } else {
         togglePlayBtn.innerHTML = "<i class='fa fa-play fa-2x'></i>"
         play = false;
+        clearInterval(checkSongInfo);
       }
     };
 
@@ -72,6 +79,7 @@ async function transferPlayback(deviceId, token) {
 
         if (response.ok) {
             console.log('Playback transferred to web device');
+            setSongInfo(token);
         } else {
             // Check if the response has content before parsing
             let errorData = null;
@@ -107,3 +115,54 @@ async function getAvailableDevices(token) {
         console.error('Error during fetch operation:', error);
     }
 }
+
+export async function setSongInfo(token) {
+    const url = `https://api.spotify.com/v1/me/player/currently-playing`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById("songPlaying").innerText = `${data.item.name} ∘ ${data.item.artists[0].name}`
+        } else {
+            console.error('Error fetching song info:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error during fetch operation:', error);
+    }
+}
+
+export async function playSong(e) {
+    let token = e.target.getAttribute("token")
+    console.log(e.target.getAttribute("uri"))
+    const url = "https://api.spotify.com/v1/me/player/play"
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            'uris': [e.target.getAttribute("uri")],
+            "position_ms": 0
+        })
+    })
+    setSongInfo(token)
+    const togglePlayBtn = document.getElementById('togglePlay')
+    togglePlayBtn.innerHTML = "<i class='fa fa-pause fa-2x'></i>"
+    play = true;
+    checkSongInfo = setInterval(setSongInfo, 5000, token)
+    
+
+
+    return response;
+}
+
+// TO-DO:
+// - the timer for setting song info is a not great method

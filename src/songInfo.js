@@ -1,3 +1,5 @@
+import { playSong } from "./webPlayer.js";
+
 const popUp = document.getElementById("popUp")
 
 export async function displaySongInfo(e) {
@@ -33,10 +35,10 @@ async function makePopUp(track, token) {
         duration += song.duration_ms
         let songTimeFormated = calculateTime(song.duration_ms)
         if (songTimeFormated[2] < 10) {songTimeFormated[2] = `0${songTimeFormated[2]}`}
-        tableData += `<tr>
-                    <td>${song.track_number}</td>
-                    <td>${song.name}</td>
-                    <td>${songTimeFormated[1]}:${songTimeFormated[2]}</td>
+        tableData += `<tr uri=${song.uri} token=${token}>
+                    <td uri=${song.uri} token=${token}>${song.track_number}</td>
+                    <td uri=${song.uri} token=${token}>${song.name}</td>
+                    <td uri=${song.uri} token=${token}>${songTimeFormated[1]}:${songTimeFormated[2]}</td>
                     </tr>`
     });
     let time = calculateTime(duration)
@@ -67,6 +69,7 @@ async function makePopUp(track, token) {
     trackInfo.innerHTML = `<div class="albumName">${track.album.name}</div>
                             <div class="top">${track.artists[0].name} ∘ ${track.album.release_date.substring(0,4)} ∘ ${numSongs} ∘ ${albumLength}</div>
                             <table class="songs">${tableData}</table>`
+    trackInfo.addEventListener('click', playSong)
     const artistInfoEl = document.getElementById("artistInfo")
     artistInfoEl.innerHTML = `<img src="${albumInfo.images[0].url}" class="albumCover">
                                 <div class="genreTags">${genres}</div>
@@ -94,7 +97,7 @@ function getGenres(genreString) {
     return genreEl;
 }
 
-async function getArtists(artistArray, token) {
+async function getArtists(artistArray) {
     let artistsEl = ""
     artistArray.forEach(element => {
         console.log(element)
@@ -107,6 +110,9 @@ async function getArtists(artistArray, token) {
     return artistsEl;
     
 }
+
+
+
 // TO-DO
 // - prolly should put things into their own functions but lazy
 // - fix artist photo
