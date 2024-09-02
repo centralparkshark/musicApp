@@ -129,10 +129,15 @@ export async function setSongInfo(token) {
 
         if (response.ok) {
             const data = await response.json();
-            document.getElementById("songPlaying").innerText = `${data.item.name} ∘ ${data.item.artists[0].name}`
+            if (data.item) {
+                const songName = data.item.name;
+                const artists = data.item.artists.map(artist => artist.name).join(', ');
+                document.getElementById("songPlaying").innerText = `${songName} ∘ ${artists}`
+            } else {
+                document.getElementById("songPlaying").innerText = "No song currently playing";
+            }
         } else {
-            console.error('Error fetching song info:', response.status, response.statusText);
-        }
+            console.error('Error fetching song info:', response.status, response.statusText);        }
     } catch (error) {
         console.error('Error during fetch operation:', error);
     }
