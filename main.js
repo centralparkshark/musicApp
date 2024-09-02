@@ -99,13 +99,13 @@ if (token) {
 // requirements
 // [x] use fetch API to populate app
 // [x] create user interaction with API (GET)
-// [ ] user manipulation of DATA (POST, PUT, or PATCH)
+// [x] user manipulation of DATA (POST, PUT, or PATCH)
 // [ ] promises
 // [x] async/await 
 // [x] 3 modules w/ import
-// [ ] runs as expected
+// [x] runs as expected
 // [x] engaging experience
-// [ ] runs without errors
+// [x] runs without errors
 // [x] commit frequently 
 // [ ] readme
 // [x] level of effort

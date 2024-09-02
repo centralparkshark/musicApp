@@ -10,7 +10,7 @@ export async function authUser() {
 
     // checks if not expired
     if (accessToken && Date.now() < expiresAt) {
-        return accessToken;
+        return Promise.resolve(accessToken);
     }
 
     // If token exists but expired, refresh it
