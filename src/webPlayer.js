@@ -14,12 +14,10 @@ export function makeMusicPlayer(token) {
 
     // Ready
     player.addListener('ready', async ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
         const devices = await getAvailableDevices(token)
         const isDeviceAvailable = devices.some(device => device.id === device_id);
         
         if (isDeviceAvailable) {
-            console.log('Device is available, transferring playback.');
             await transferPlayback(device_id, token);
         } else {
             console.error('Device is not listed as available, cannot transfer playback.');
@@ -78,7 +76,6 @@ async function transferPlayback(deviceId, token) {
         });
 
         if (response.ok) {
-            console.log('Playback transferred to web device');
             setSongInfo(token);
         } else {
             // Check if the response has content before parsing
@@ -106,7 +103,6 @@ async function getAvailableDevices(token) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Available devices:', data);
             return data.devices;
         } else {
             console.error('Error fetching devices:', response.status, response.statusText);
@@ -145,7 +141,6 @@ export async function setSongInfo(token) {
 
 export async function playSong(e) {
     let token = e.target.getAttribute("token")
-    console.log(e.target.getAttribute("uri"))
     const url = "https://api.spotify.com/v1/me/player/play"
     const response = await fetch(url, {
         method: 'PUT',

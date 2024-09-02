@@ -16,7 +16,6 @@ export async function displaySongInfo(e) {
 }
 
 async function makePopUp(track, token) {
-    console.log(track)
     // info contains track info
 
     // use info to fetch album info
@@ -25,7 +24,6 @@ async function makePopUp(track, token) {
         headers: { Authorization: `Bearer ${token}` }
     });
     const albumInfo = await album.json()
-    // console.log(albumInfo)
 
     // left side information
     let duration = 0;
@@ -100,7 +98,6 @@ function getGenres(genreString) {
 async function getArtists(artistArray) {
     let artistsEl = ""
     artistArray.forEach(element => {
-        console.log(element)
         artistsEl += `<div class="artist">
                             <img src="./imgs/sabrinaCarpenter.jpg">
                             <div class="artistName">${element.name}</div>

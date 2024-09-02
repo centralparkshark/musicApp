@@ -1,27 +1,22 @@
 // most of this comes directly from spotify oauth how-to page
 export async function authUser() {
-    console.log("starting to auth user")
     let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
     //let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
     // Check if access token exists and is valid
     let accessToken = localStorage.getItem("accessToken");
-    console.log("Access Token:", accessToken); 
     const expiresAt = localStorage.getItem("expiresAt");
 
     // checks if not expired
     if (accessToken && Date.now() < expiresAt) {
-        console.log("Using existing access token");
         return accessToken;
     }
 
     // If token exists but expired, refresh it
     if (accessToken && Date.now() >= expiresAt) {
-        console.log("Access token expired, refreshing...");
         accessToken = await refreshAccessToken();
         if (accessToken) {
-            console.log("Token refreshed");
             return accessToken;
         }
     }
@@ -42,13 +37,10 @@ export async function authUser() {
         }
         
     } else {
-        console.log("No code or valid access token found, redirecting to auth code flow...");
         await redirectToAuthCodeFlow(clientId, redirectUri);
     }
 
     async function redirectToAuthCodeFlow(clientId) {
-        console.log("redirected to auth code flow")
-        // TODO: Redirect to Spotify authorization page
         const verifier = generateCodeVerifier(128);
         const challenge = await generateCodeChallenge(verifier);
 
@@ -85,7 +77,6 @@ export async function authUser() {
     }
 
     async function getAccessToken(clientId, code) {
-        console.log("getting access token")
         const verifier = localStorage.getItem("verifier");
 
         const params = new URLSearchParams();
@@ -104,7 +95,6 @@ export async function authUser() {
        
 
         const data = await result.json();
-        console.log("Token response:", data)
         if (!result.ok) { // Check if the request was successful
             console.error("Failed to get access token:", result.statusText);
             return null;
@@ -128,7 +118,6 @@ export async function authUser() {
     }
 
     async function refreshAccessToken() {
-        console.log("getting refresh token")
         const refreshToken = localStorage.getItem("refreshToken");
 
         const params = new URLSearchParams();
