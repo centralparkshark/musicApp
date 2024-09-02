@@ -1,9 +1,8 @@
 let play = false;
-let checkSongInfo;
 
 export function makeMusicPlayer(token) {
     const togglePlayBtn = document.getElementById('togglePlay')
-    
+    let playerReady = false;
 
     const player = new Spotify.Player({
         name: 'Web Playback SDK Quick Start Player',
@@ -14,6 +13,7 @@ export function makeMusicPlayer(token) {
 
     // Ready
     player.addListener('ready', async ({ device_id }) => {
+        playerReady = true;
         const devices = await getAvailableDevices(token)
         const isDeviceAvailable = devices.some(device => device.id === device_id);
         
@@ -26,35 +26,26 @@ export function makeMusicPlayer(token) {
 
     // Not Ready
     player.addListener('not_ready', ({ device_id }) => {
+        playerReady = false;
         console.log('Device ID has gone offline', device_id);
     });
 
-    player.addListener('initialization_error', ({ message }) => {
-        console.error(message);
+    player.addListener('player_state_changed', async state => {
+        if (state) {
+            const track = state.track_window.current_track;
+            const artists = track.artists.map(artist => artist.name).join(', ');
+            document.getElementById("songPlaying").innerText = `${track.name} ∘ ${artists}`;
+        }
     });
 
-    player.addListener('authentication_error', ({ message }) => {
-        console.error(message);
-    });
-
-    player.addListener('account_error', ({ message }) => {
-        console.error(message);
-    });
-
-    checkSongInfo = setInterval(setSongInfo, 5000, token)
-
-    togglePlayBtn.onclick = function() {
-      player.togglePlay();
-      if (play == false) {
-        togglePlayBtn.innerHTML = "<i class='fa fa-pause fa-2x'></i>"
-        play = true;
-        checkSongInfo = setInterval(setSongInfo, 5000, token)
-      } else {
-        togglePlayBtn.innerHTML = "<i class='fa fa-play fa-2x'></i>"
-        play = false;
-        clearInterval(checkSongInfo);
-      }
-    };
+    togglePlayBtn.onclick = async function() {
+        if (playerReady) {
+            await player.togglePlay();
+            play = !play;
+            togglePlayBtn.innerHTML = play ? "<i class='fa fa-pause fa-2x'></i>" : "<i class='fa fa-play fa-2x'></i>";
+        }
+        
+      };
 
     player.connect();
 }
@@ -76,7 +67,7 @@ async function transferPlayback(deviceId, token) {
         });
 
         if (response.ok) {
-            setSongInfo(token);
+            console.log('Playback successfully transferred.');
         } else {
             // Check if the response has content before parsing
             let errorData = null;
@@ -157,12 +148,12 @@ export async function playSong(e) {
     const togglePlayBtn = document.getElementById('togglePlay')
     togglePlayBtn.innerHTML = "<i class='fa fa-pause fa-2x'></i>"
     play = true;
-    checkSongInfo = setInterval(setSongInfo, 5000, token)
     
 
 
     return response;
 }
 
-// TO-DO:
-// - the timer for setting song info is a not great method
+
+// To-Do: 
+// - fix what to do if queue is empty
