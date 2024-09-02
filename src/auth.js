@@ -1,7 +1,7 @@
 // most of this comes directly from spotify oauth how-to page
 export async function authUser() {
-    //let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
-    let redirectUri = 'http://127.0.0.1:5500/index.html'
+    let redirectUri = 'https://music-app-gamma-eight.vercel.app/'
+    //let redirectUri = 'http://127.0.0.1:5500/index.html'
     let clientId = "1c838ac2f4f348c39ab500dd048c0d77"
 
     // Check if access token exists and is valid
