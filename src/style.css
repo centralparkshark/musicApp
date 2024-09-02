@@ -74,7 +74,7 @@ button {
 #toggleMode {
     position: fixed;
     right: 10px;
-    bottom: 10px;
+    bottom: 110px;
     z-index: 1;
 }
 
@@ -94,7 +94,6 @@ button {
 }
 
 .card {
-    transform: translateX(-20px);
     margin: 40px;
     height: 150px;
     width: 270px;
@@ -294,6 +293,7 @@ tbody>tr:hover {
 
 .webPlayer .left {
     padding-right: 10px;
+    max-width: 75%;
 }
 
 #togglePlay {
@@ -310,4 +310,13 @@ tbody>tr:hover {
 #togglePlay>i {
     width: 50px;
     text-align: center;
+}
+
+@media (max-width: 700px) {
+    .popUpInfo {
+        flex-direction: column;
+        .left, .right {
+            width: 100%;
+        }
+    }
 }

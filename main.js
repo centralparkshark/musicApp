@@ -90,12 +90,9 @@ if (token) {
 }
 
 // TO-DO: 
-// - fix login 
 // - click -> pop up
     // - get recs
-// - player? 
-    // add to queue, play now
-// - fix favicon
+// - fix favicon (nah)
 // - make input range work
 // - mobile css 
 
