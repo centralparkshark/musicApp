@@ -1,4 +1,4 @@
-# Mindfulness Bingo
+# Music App
 ## Description
 
 Simple music player using Spotify's API and Webplayback SDK. Pulls logged in users top songs and allows them to be played. Also displays album information for each of the songs.
